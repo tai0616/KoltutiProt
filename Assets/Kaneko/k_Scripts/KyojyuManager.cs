@@ -7,7 +7,7 @@ public class KyojyuManager : MonoBehaviour
     Ray ray;
     RaycastHit hit;            //Rayが当たったオブジェクトの情報を入れる箱
     public float ray_distance;
-  
+    public Transform ray_startpos;
 
     Rigidbody KyojyuuRb;
     public float speed = 1;
@@ -49,10 +49,10 @@ public class KyojyuManager : MonoBehaviour
         Kyojyu_rotation_now = movenow;//今は横に動いてるとき常に回転している
 
         ///////////////レイで岩山を判断///////////////
-        ray = new Ray(transform.position, transform.TransformDirection(new Vector3(0,0, ray_distance)));
+        ray = new Ray(ray_startpos.transform.position, transform.TransformDirection(new Vector3(0,0, ray_distance)));
 
         //レイを可視化
-        Debug.DrawRay(transform.position, transform.TransformDirection(new Vector3(0, 0, ray_distance)), Color.yellow);
+        Debug.DrawRay(ray_startpos.transform.position, transform.TransformDirection(new Vector3(0, 0, ray_distance)), Color.yellow);
 
         if (Physics.Raycast(ray, out hit, ray_distance))//Rayの当たり判定
         {
