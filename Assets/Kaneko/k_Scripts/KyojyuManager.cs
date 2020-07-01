@@ -31,6 +31,11 @@ public class KyojyuManager : MonoBehaviour
 
     public bool Kyojyu_rotation_now = false;
 
+    private bool Kyojyu_Dont_Sidemove = false;
+
+    private float time = 0.0f;
+    public float Dontmove_time;
+
     private void Start()
     {
         KyojyuuRb = GetComponent<Rigidbody>();
@@ -54,10 +59,11 @@ public class KyojyuManager : MonoBehaviour
         //レイを可視化
         Debug.DrawRay(ray_startpos.transform.position, transform.TransformDirection(new Vector3(0, 0, ray_distance)), Color.yellow);
 
+        //岩山を自動で避ける時
         if (Physics.Raycast(ray, out hit, ray_distance))//Rayの当たり判定
         {
             //Rayが当たったオブジェクトのtagがPlayerだったら
-            if (hit.collider.tag == "MountainRock" && movenow == false)
+            if (hit.collider.tag == "MountainRock" && movenow == false && Kyojyu_Dont_Sidemove == false)
             {
                 if (L_weight < R_weight)//右の方が重かった時
                 {
@@ -78,6 +84,43 @@ public class KyojyuManager : MonoBehaviour
             }
         }
 
+
+        //ケンジャクで巨獣を動かすとき
+        if (R_weight - L_weight * 2 >= 0 && movenow == false && Kyojyu_Dont_Sidemove == false)//右が左の２倍以上重くなった時
+        {
+            next_RailNumber++;
+            movenow = true;
+            KyojyuuRb.velocity = Vector3.zero;
+            KyojyuuRb.angularVelocity = Vector3.zero;
+
+            Kyojyu_Dont_Sidemove = true;
+        }
+        else if (L_weight - R_weight * 2 >= 0 && movenow == false && Kyojyu_Dont_Sidemove == false)
+        {
+            next_RailNumber--;
+            movenow = true;
+            KyojyuuRb.velocity = Vector3.zero;
+            KyojyuuRb.angularVelocity = Vector3.zero;
+
+            Kyojyu_Dont_Sidemove = true;
+        }
+
+
+
+        if (Kyojyu_Dont_Sidemove == true)
+        {
+            time += Time.deltaTime;
+
+            if (time >= Dontmove_time)
+            {
+                //Debug.Log(time);
+                Kyojyu_Dont_Sidemove = false;
+                time = 0;
+            }
+        }
+
+
+        //横に移動処理
         if (movenow == true)//横に移動中
         {
             if (next_RailNumber - now_RailNumber > 0)//右に移動
