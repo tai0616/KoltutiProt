@@ -11,8 +11,9 @@ public class o_Rock : MonoBehaviour
     [SerializeField]
     bool canMove = true;
     [SerializeField]
-    int mass;
-
+    int mass = 1;
+    public int massR = 1;
+    
     [SerializeField]
     o_RockManager.MOVE right_left=o_RockManager.MOVE.RIGHT;
     //岩マネージャー内配列の中の位置
@@ -41,32 +42,33 @@ public class o_Rock : MonoBehaviour
     public bool RockMove(o_RockManager.MOVE caseMove)
     {
         //test
-        {
-            if (rockManager.RockMoveM(this/*,colum*/, row, caseMove))
-            {
-                //switch (caseMove)
-                //{
-                //    case o_RockManager.MOVE.UP:
-                //        transform.Translate(0, 1, 0);
-                //        break;
+        //{
+        //if (rockManager.RockMoveM(this/*,colum*/, row, caseMove))
+        //{
+        //switch (caseMove)
+        //{
+        //    case o_RockManager.MOVE.UP:
+        //        transform.Translate(0, 1, 0);
+        //        break;
 
-                //    case o_RockManager.MOVE.DOWN:
-                //        transform.Translate(0, -1, 0);
-                //        break;
+        //    case o_RockManager.MOVE.DOWN:
+        //        transform.Translate(0, -1, 0);
+        //        break;
 
-                //    case o_RockManager.MOVE.FRONT:
-                //        transform.Translate(0, 0, 1);
-                //        break;
+        //    case o_RockManager.MOVE.FRONT:
+        //        transform.Translate(0, 0, 1);
+        //        break;
 
-                //    case o_RockManager.MOVE.BACK:
-                //        transform.Translate(0, 0, -1);
-                //        break;
-                //}
-                return true;
-            }
-            return false;
-        }
-        //return rockManager.RockMoveM(this/*,colum*/, row, caseMove);
+        //    case o_RockManager.MOVE.BACK:
+        //        transform.Translate(0, 0, -1);
+        //        break;
+        //}
+        //return true;
+        //    }
+        //    return false;
+        //}
+        if (!canMove) return false;
+        return rockManager.RockMoveM(this/*,colum*/, row, caseMove);
     }
 
     //RockManager用
@@ -160,5 +162,15 @@ public class o_Rock : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    public void CalcMass()
+    {
+        if (ridedRock != null)
+        {
+            massR = (int)((mass + ridedRock.mass) * rockManager.massCoe);
+            return;
+        }
+        massR = mass;
     }
 }

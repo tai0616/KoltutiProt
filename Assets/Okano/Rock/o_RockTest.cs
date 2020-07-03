@@ -74,6 +74,11 @@ public class o_RockTest : MonoBehaviour
         {
             destroyRock.RockDestroy();
         }
+
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            moveRockM.CalcMassRL();
+        }
     }
 
 

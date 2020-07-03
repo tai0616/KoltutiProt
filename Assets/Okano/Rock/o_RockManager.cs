@@ -48,6 +48,8 @@ public class o_RockManager : MonoBehaviour
 
 
     public int massR = 0, massL = 0;
+    [Tooltip ("上乗せ時の係数")]
+    public float massCoe=2.0f;
     //岩の付いているbodyの回転　多分Z軸
     float bodyRotation;
     [SerializeField]
@@ -162,7 +164,7 @@ public class o_RockManager : MonoBehaviour
             default:
                 break;
         }
-        Debug.Log("adr2:" + adr2[0] + adr2[1] + adr2[2]);
+        //Debug.Log("adr2:" + adr2[0] + adr2[1] + adr2[2]);
         //移動　成功ならtrue失敗ならfalse
         switch (adr2[0])
         {
@@ -183,6 +185,17 @@ public class o_RockManager : MonoBehaviour
                             list_rocksL[adr[1]][row] = null;
                         }
                     }
+                    else
+                    {
+                        if (adr[0] == (int)MOVE.RIGHT)
+                        {
+                            list_rocksR[adr[1]][row].CalcMass();
+                        }
+                        else
+                        {
+                            list_rocksL[adr[1]][row].CalcMass();
+                        }
+                    }
                 }
                 //移動先にあるなら乗せる
                 else if (moveToRockManager.list_rocksR[adr2[1]][adr2[2]].RideRock(rockA))
@@ -190,13 +203,25 @@ public class o_RockManager : MonoBehaviour
 
                     if (adr[0] == (int)MOVE.RIGHT)
                     {
-                        if(rockA.Equals(list_rocksR[adr[1]][row]))
-                        list_rocksR[adr[1]][row] = null;
+                        if (rockA.Equals(list_rocksR[adr[1]][row]))
+                        {
+                            list_rocksR[adr[1]][row] = null;
+                        }
+                        else
+                        {
+                            list_rocksR[adr[1]][row].CalcMass();
+                        }
                     }
                     else
                     {
                         if (rockA.Equals(list_rocksL[adr[1]][row]))
+                        {
                             list_rocksL[adr[1]][row] = null;
+                        }
+                        else
+                        {
+                            list_rocksL[adr[1]][row].CalcMass();
+                        }
                     }
                 }
                 else 
@@ -206,8 +231,8 @@ public class o_RockManager : MonoBehaviour
                 }
 
                 //
-                rockA.Move(moveToRockManager,(MOVE)adr2[0],adr2[1], adr2[2],CulcMoveToPosition(adr2[0], adr2[1], adr2[2]));
-
+                rockA.Move(moveToRockManager,(MOVE)adr2[0],adr2[1], adr2[2],CalcMoveToPosition(adr2[0], adr2[1], adr2[2]));
+                moveToRockManager.list_rocksR[adr2[1]][adr2[2]].CalcMass();
                 return true;
                 break;
             case (int)MOVE.LEFT:
@@ -225,18 +250,42 @@ public class o_RockManager : MonoBehaviour
                             list_rocksL[adr[1]][row] = null;
                         }
                     }
+                    else
+                    {
+                        if (adr[0] == (int)MOVE.RIGHT)
+                        {
+                            list_rocksR[adr[1]][row].CalcMass();
+                        }
+                        else
+                        {
+                            list_rocksL[adr[1]][row].CalcMass();
+                        }
+                    }
+
                 }
                 else if (moveToRockManager.list_rocksL[adr2[1]][adr2[2]].RideRock(rockA))
                 {
                     if (adr[0] == (int)MOVE.RIGHT)
                     {
                         if (rockA.Equals(list_rocksR[adr[1]][row]))
+                        {
                             list_rocksR[adr[1]][row] = null;
+                        }
+                        else
+                        {
+                            list_rocksR[adr[1]][row].CalcMass();
+                        }
                     }
                     else
                     {
                         if (rockA.Equals(list_rocksL[adr[1]][row]))
+                        {
                             list_rocksL[adr[1]][row] = null;
+                        }
+                        else
+                        {
+                            list_rocksL[adr[1]][row].CalcMass();
+                        }
                     }
                 }
                 else
@@ -245,8 +294,8 @@ public class o_RockManager : MonoBehaviour
                     return false;
                 }
 
-                rockA.Move(moveToRockManager, (MOVE)adr2[0],adr2[1], adr2[2],CulcMoveToPosition(adr2[0], adr2[1], adr2[2]));
-                
+                rockA.Move(moveToRockManager, (MOVE)adr2[0],adr2[1], adr2[2],CalcMoveToPosition(adr2[0], adr2[1], adr2[2]));
+                moveToRockManager.list_rocksR[adr2[1]][adr2[2]].CalcMass();
                 return true;
                 break;
         }
@@ -266,6 +315,10 @@ public class o_RockManager : MonoBehaviour
                 {
                     list_rocksR[listNum][row] = null;
                 }
+                else
+                {
+                    list_rocksR[listNum][row].CalcMass();
+                }
                 return true;
             }
             else if (rockA.EqualsRocksPos(list_rocksL[listNum][row]))
@@ -273,6 +326,10 @@ public class o_RockManager : MonoBehaviour
                 if (rockA.Equals(list_rocksL[listNum][row]))
                 {
                     list_rocksL[listNum][row] = null;
+                }
+                else
+                {
+                    list_rocksL[listNum][row].CalcMass();
                 }
                 return true;
             }
@@ -282,7 +339,7 @@ public class o_RockManager : MonoBehaviour
 
     public void SetRock(o_Rock o_rock,MOVE right_left,int rockCol,int rockRow)
     {
-        o_rock.Move(this, right_left, rockCol, rockRow, CulcMoveToPosition((int)right_left, rockCol, rockRow));
+        o_rock.Move(this, right_left, rockCol, rockRow, CalcMoveToPosition((int)right_left, rockCol, rockRow));
         if (right_left == MOVE.RIGHT)
         {
             list_rocksR[rockCol][rockRow] = o_rock;
@@ -291,7 +348,7 @@ public class o_RockManager : MonoBehaviour
         list_rocksL[rockCol][rockRow] = o_rock;
     }
 
-    Vector3 CulcMoveToPosition(int right_left,int col,int row)
+    Vector3 CalcMoveToPosition(int right_left,int col,int row)
     {
         Vector3 toPos = new Vector3(1.0f / rocksCol + 0.5f, 1.0f / rocksCol + 0.5f, 0.5f - 1.0f / rocksCol);
 
@@ -315,7 +372,28 @@ public class o_RockManager : MonoBehaviour
         {
             toPos.x *= -1;
         }
-        Debug.Log(toPos + "toPos");
+        //Debug.Log(toPos + "toPos");
         return toPos;
+    }
+
+    public void CalcMassRL()
+    {
+        massR = 0;
+        massL = 0;
+
+        for (int colum = 0; colum < rocksCol; colum++)
+        {
+            for (int row = 0; row < rocksRow; row++)
+            {
+                if (list_rocksR[colum][row] != null)
+                {
+                    massR += list_rocksR[colum][row].massR;
+                }
+                if (list_rocksL[colum][row] != null)
+                {
+                    massL += list_rocksL[colum][row].massR;
+                }
+            }
+        }
     }
 }
