@@ -15,7 +15,7 @@ public class o_RockTest : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        moveRock.Move(moveRockM,right_left ,rockCol, rockRow);
+        moveRock.Move(moveRockM,right_left ,rockCol, rockRow,Vector3.zero);
     }
 
     // Update is called once per frame

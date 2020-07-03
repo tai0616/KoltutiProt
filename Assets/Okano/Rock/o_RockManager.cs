@@ -55,6 +55,8 @@ public class o_RockManager : MonoBehaviour
     [SerializeField]
     o_RockManager backRM=null;
 
+    [SerializeField, Tooltip("a")]
+    int a; 
 
     // Start is called before the first frame update
     void Start()
@@ -142,7 +144,7 @@ public class o_RockManager : MonoBehaviour
                         return false;
                     }
                     moveToRockManager = moveToRockManager.frontRM;
-                    adr2[2]++;                    
+                    adr2[2]=moveToRockManager.rocksRow-1;                    
                 }
                 break;
             case MOVE.BACK:
@@ -154,7 +156,7 @@ public class o_RockManager : MonoBehaviour
                         return false;
                     }
                     moveToRockManager = moveToRockManager.backRM;
-                    adr2[2]--;
+                    adr2[2]=0;
                 }
                 break;
             default:
@@ -176,7 +178,7 @@ public class o_RockManager : MonoBehaviour
                     return false;
                 }
                 //
-                rockA.Move(moveToRockManager,(MOVE)adr2[0],adr2[1], adr2[2]);
+                rockA.Move(moveToRockManager,(MOVE)adr2[0],adr2[1], adr2[2],CulcMoveToPosition(adr2[0], adr2[1], adr2[2]));
                 if (adr[0] == (int)MOVE.RIGHT)
                 {
                     list_rocksR[adr[1]][row] = null;
@@ -196,7 +198,7 @@ public class o_RockManager : MonoBehaviour
                 {
                     return false;
                 }
-                rockA.Move(moveToRockManager, (MOVE)adr2[0],adr2[1], adr2[2]);
+                rockA.Move(moveToRockManager, (MOVE)adr2[0],adr2[1], adr2[2],CulcMoveToPosition(adr2[0], adr2[1], adr2[2]));
                 if (adr[0] == (int)MOVE.RIGHT)
                 {
                     list_rocksR[adr[1]][row] = null;
@@ -213,11 +215,40 @@ public class o_RockManager : MonoBehaviour
 
     public void SetRock(o_Rock o_rock,MOVE right_left,int rockCol,int rockRow)
     {
+        o_rock.Move(this, right_left, rockCol, rockRow, CulcMoveToPosition((int)right_left, rockCol, rockRow));
         if (right_left == MOVE.RIGHT)
         {
             list_rocksR[rockCol][rockRow] = o_rock;
             return;
         }
         list_rocksL[rockCol][rockRow] = o_rock;
+    }
+
+    Vector3 CulcMoveToPosition(int right_left,int col,int row)
+    {
+        Vector3 toPos = new Vector3(1.0f / rocksCol + 0.5f, 1.0f / rocksCol + 0.5f, 0.5f - 1.0f / rocksCol);
+
+        if (rocksCol / 4 > col)
+        {
+            toPos.x -= (rocksCol / 4 - col) * 2.0f / rocksCol;
+        }
+        else if (rocksCol * 3 / 4 <= col)
+        {
+            toPos.x += (rocksCol * 3 / 4 - col - 1) * 2.0f / rocksCol;
+            toPos.y *= -1;
+        }
+        else
+        {
+            toPos.y -= (col - rocksCol / 4 + 1) * 2.0f / rocksCol;
+        }
+
+        toPos.z -= row * 2.0f / rocksCol;
+
+        if (right_left == (int)MOVE.LEFT)
+        {
+            toPos.x *= -1;
+        }
+        Debug.Log(toPos + "toPos");
+        return toPos;
     }
 }

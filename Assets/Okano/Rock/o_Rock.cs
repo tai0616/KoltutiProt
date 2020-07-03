@@ -42,24 +42,24 @@ public class o_Rock : MonoBehaviour
         {
             if (rockManager.RockMoveM(this/*,colum*/, row, caseMove))
             {
-                switch (caseMove)
-                {
-                    case o_RockManager.MOVE.UP:
-                        transform.Translate(0, 1, 0);
-                        break;
+                //switch (caseMove)
+                //{
+                //    case o_RockManager.MOVE.UP:
+                //        transform.Translate(0, 1, 0);
+                //        break;
 
-                    case o_RockManager.MOVE.DOWN:
-                        transform.Translate(0, -1, 0);
-                        break;
+                //    case o_RockManager.MOVE.DOWN:
+                //        transform.Translate(0, -1, 0);
+                //        break;
 
-                    case o_RockManager.MOVE.FRONT:
-                        transform.Translate(0, 0, 1);
-                        break;
+                //    case o_RockManager.MOVE.FRONT:
+                //        transform.Translate(0, 0, 1);
+                //        break;
 
-                    case o_RockManager.MOVE.BACK:
-                        transform.Translate(0, 0, -1);
-                        break;
-                }
+                //    case o_RockManager.MOVE.BACK:
+                //        transform.Translate(0, 0, -1);
+                //        break;
+                //}
                 return true;
             }
             return false;
@@ -68,12 +68,16 @@ public class o_Rock : MonoBehaviour
     }
 
     //RockManager用
-    public void Move(o_RockManager moveToRockManager,o_RockManager.MOVE right_left0, int colNum, int rowNum)
+    public void Move(o_RockManager moveToRockManager,o_RockManager.MOVE right_left0, int colNum, int rowNum,Vector3 pos)
     {
+        transform.parent = moveToRockManager.transform;
+        if (pos != Vector3.zero) transform.localPosition = pos;
         rockManager = moveToRockManager;
         right_left = right_left0;
         colum = colNum;
         row = rowNum;
+
+
     }
 
     //RockManager用
