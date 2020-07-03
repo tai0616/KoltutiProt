@@ -81,17 +81,17 @@ public class o_RockManager : MonoBehaviour
     //Rockからよう　移動　成功ならtrue失敗ならfalse
     public bool RockMoveM(o_Rock rockA/*, int col*/,int row, o_RockManager.MOVE caseNum)
     {
-        int[] adr = new int[2]; 
+        int[] adr = new int[2] { 0, 0 }; 
         //Rockの位置検索
         for (int listNum = 0; listNum < rocksCol; listNum++)
         {
-            if (rockA.Equals(list_rocksR[listNum][row]))
+            if (rockA.EqualsRocksPos(list_rocksR[listNum][row]))
             {
                 adr[0] = (int)MOVE.RIGHT;
                 adr[1] = listNum;
                 break;
             }
-            else if(rockA.Equals(list_rocksL[listNum][row]))
+            else if(rockA.EqualsRocksPos(list_rocksL[listNum][row]))
             {
                 adr[0] = (int)MOVE.LEFT;
                 adr[1] = listNum;
@@ -162,6 +162,7 @@ public class o_RockManager : MonoBehaviour
             default:
                 break;
         }
+        Debug.Log("adr2:" + adr2[0] + adr2[1] + adr2[2]);
         //移動　成功ならtrue失敗ならfalse
         switch (adr2[0])
         {
@@ -169,46 +170,112 @@ public class o_RockManager : MonoBehaviour
                 //移動先が空なら突っ込む
                 if (moveToRockManager.list_rocksR[adr2[1]][adr2[2]] == null)
                 {
+                    
                     moveToRockManager.list_rocksR[adr2[1]][adr2[2]] = rockA;
+                    if (!rockA.GetOffRock())
+                    {
+                        if (adr[0] == (int)MOVE.RIGHT)
+                        {
+                            list_rocksR[adr[1]][row] = null;
+                        }
+                        else
+                        {
+                            list_rocksL[adr[1]][row] = null;
+                        }
+                    }
                 }
                 //移動先にあるなら乗せる
-                else if (!moveToRockManager.list_rocksR[adr2[1]][adr2[2]].RideRock(rockA))
+                else if (moveToRockManager.list_rocksR[adr2[1]][adr2[2]].RideRock(rockA))
+                {
+
+                    if (adr[0] == (int)MOVE.RIGHT)
+                    {
+                        if(rockA.Equals(list_rocksR[adr[1]][row]))
+                        list_rocksR[adr[1]][row] = null;
+                    }
+                    else
+                    {
+                        if (rockA.Equals(list_rocksL[adr[1]][row]))
+                            list_rocksL[adr[1]][row] = null;
+                    }
+                }
+                else 
                 {
                     //乗せるのに失敗したらfalse
                     return false;
                 }
+
                 //
                 rockA.Move(moveToRockManager,(MOVE)adr2[0],adr2[1], adr2[2],CulcMoveToPosition(adr2[0], adr2[1], adr2[2]));
-                if (adr[0] == (int)MOVE.RIGHT)
-                {
-                    list_rocksR[adr[1]][row] = null;
-                }
-                else
-                {
-                    list_rocksL[adr[1]][row] = null;
-                }
+
                 return true;
                 break;
             case (int)MOVE.LEFT:
                 if (moveToRockManager.list_rocksL[adr2[1]][adr2[2]] == null)
                 {
                     moveToRockManager.list_rocksL[adr2[1]][adr2[2]] = rockA;
+                    if (!rockA.GetOffRock())
+                    {
+                        if (adr[0] == (int)MOVE.RIGHT)
+                        {
+                            list_rocksR[adr[1]][row] = null;
+                        }
+                        else
+                        {
+                            list_rocksL[adr[1]][row] = null;
+                        }
+                    }
                 }
-                else if (!moveToRockManager.list_rocksL[adr2[1]][adr2[2]].RideRock(rockA))
+                else if (moveToRockManager.list_rocksL[adr2[1]][adr2[2]].RideRock(rockA))
                 {
-                    return false;
-                }
-                rockA.Move(moveToRockManager, (MOVE)adr2[0],adr2[1], adr2[2],CulcMoveToPosition(adr2[0], adr2[1], adr2[2]));
-                if (adr[0] == (int)MOVE.RIGHT)
-                {
-                    list_rocksR[adr[1]][row] = null;
+                    if (adr[0] == (int)MOVE.RIGHT)
+                    {
+                        if (rockA.Equals(list_rocksR[adr[1]][row]))
+                            list_rocksR[adr[1]][row] = null;
+                    }
+                    else
+                    {
+                        if (rockA.Equals(list_rocksL[adr[1]][row]))
+                            list_rocksL[adr[1]][row] = null;
+                    }
                 }
                 else
                 {
-                    list_rocksL[adr[1]][row] = null;
+                    //乗せるのに失敗したらfalse
+                    return false;
                 }
+
+                rockA.Move(moveToRockManager, (MOVE)adr2[0],adr2[1], adr2[2],CulcMoveToPosition(adr2[0], adr2[1], adr2[2]));
+                
                 return true;
                 break;
+        }
+        return false;
+    }
+
+
+    //Rockからよう　移動　成功ならtrue失敗ならfalse
+    public bool RockDestroyM(o_Rock rockA, int row)
+    {
+        //Rockの位置検索
+        for (int listNum = 0; listNum < rocksCol; listNum++)
+        {
+            if (rockA.EqualsRocksPos(list_rocksR[listNum][row]))
+            {
+                if (rockA.Equals(list_rocksR[listNum][row]))
+                {
+                    list_rocksR[listNum][row] = null;
+                }
+                return true;
+            }
+            else if (rockA.EqualsRocksPos(list_rocksL[listNum][row]))
+            {
+                if (rockA.Equals(list_rocksL[listNum][row]))
+                {
+                    list_rocksL[listNum][row] = null;
+                }
+                return true;
+            }
         }
         return false;
     }

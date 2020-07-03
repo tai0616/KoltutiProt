@@ -12,10 +12,42 @@ public class o_RockTest : MonoBehaviour
     o_RockManager.MOVE right_left = o_RockManager.MOVE.RIGHT;
     [SerializeField]
     int rockCol = 0, rockRow = 0;
+
+    [SerializeField]
+    o_Rock destroyRock = null;
+
+    [SerializeField]
+    GameObject rockPrefab = null;
+    [SerializeField]
+    bool[] CreateRocksR = new bool[32]
+    {
+        false,false,false,false ,
+        false,false,false,false ,
+        false,false,false,false ,
+        false,false,false,false ,
+        false,false,false,false ,
+        false,false,false,false ,
+        false,false,false,false ,
+        false,false,false,false
+    };
+
     // Start is called before the first frame update
     void Start()
     {
-        moveRock.Move(moveRockM,right_left ,rockCol, rockRow,Vector3.zero);
+        moveRockM.SetRock(moveRock,right_left ,rockCol, rockRow);
+
+        for(int i = 0; i < 8; i++)
+        {
+            for (int j = 0; j < 4; j++)
+            {
+                if (CreateRocksR[i*4+j])
+                {
+                    GameObject createObj = Instantiate(rockPrefab);
+                    createObj.transform.localScale = Vector3.one;
+                    moveRockM.SetRock(createObj.GetComponent<o_Rock>(), o_RockManager.MOVE.RIGHT, i, j);
+                }
+            }
+        }
     }
 
     // Update is called once per frame
@@ -37,5 +69,12 @@ public class o_RockTest : MonoBehaviour
         {
             moveRock.RockMove(o_RockManager.MOVE.BACK);
         }
+
+        if (Input.GetKeyDown(KeyCode.D) && destroyRock != null)
+        {
+            destroyRock.RockDestroy();
+        }
     }
+
+
 }
