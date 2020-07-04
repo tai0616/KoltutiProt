@@ -18,30 +18,30 @@ public class o_RockManager : MonoBehaviour
     [SerializeField]
     int rocksRow = 4;
     [SerializeField]
-    o_Rock[,][] rocks = new o_Rock[2, 8][]
-    {
-        {
-        new o_Rock[] { null, null, null, null },
-        new o_Rock[] { null, null, null, null },
-        new o_Rock[] { null, null, null, null },
-        new o_Rock[] { null, null, null, null },
-        new o_Rock[] { null, null, null, null },
-        new o_Rock[] { null, null, null, null },
-        new o_Rock[] { null, null, null, null },
-        new o_Rock[] { null, null, null, null }
-        },
-        {
-        new o_Rock[] { null, null, null, null },
-        new o_Rock[] { null, null, null, null },
-        new o_Rock[] { null, null, null, null },
-        new o_Rock[] { null, null, null, null },
-        new o_Rock[] { null, null, null, null },
-        new o_Rock[] { null, null, null, null },
-        new o_Rock[] { null, null, null, null },
-        new o_Rock[] { null, null, null, null }
-        }
-    };
-    [SerializeField]
+    //o_Rock[,][] rocks = new o_Rock[2, 8][]
+    //{
+    //    {
+    //    new o_Rock[] { null, null, null, null },
+    //    new o_Rock[] { null, null, null, null },
+    //    new o_Rock[] { null, null, null, null },
+    //    new o_Rock[] { null, null, null, null },
+    //    new o_Rock[] { null, null, null, null },
+    //    new o_Rock[] { null, null, null, null },
+    //    new o_Rock[] { null, null, null, null },
+    //    new o_Rock[] { null, null, null, null }
+    //    },
+    //    {
+    //    new o_Rock[] { null, null, null, null },
+    //    new o_Rock[] { null, null, null, null },
+    //    new o_Rock[] { null, null, null, null },
+    //    new o_Rock[] { null, null, null, null },
+    //    new o_Rock[] { null, null, null, null },
+    //    new o_Rock[] { null, null, null, null },
+    //    new o_Rock[] { null, null, null, null },
+    //    new o_Rock[] { null, null, null, null }
+    //    }
+    //};
+    //[SerializeField]
     /*public*/
     List<o_Rock[]> list_rocksR = new List<o_Rock[]>();
     /*public*/ List<o_Rock[]> list_rocksL =new List<o_Rock[]>();
@@ -58,6 +58,33 @@ public class o_RockManager : MonoBehaviour
     o_RockManager backRM=null;
 
     [SerializeField]
+    GameObject rockPrefab = null;
+    [SerializeField]
+    bool[] CreateRocksR = new bool[32]
+{
+        false,false,false,false ,
+        false,false,false,false ,
+        false,false,false,false ,
+        false,false,false,false ,
+        false,false,false,false ,
+        false,false,false,false ,
+        false,false,false,false ,
+        false,false,false,false
+};
+    [SerializeField]
+    bool[] CreateRocksL = new bool[32]
+{
+        false,false,false,false ,
+        false,false,false,false ,
+        false,false,false,false ,
+        false,false,false,false ,
+        false,false,false,false ,
+        false,false,false,false ,
+        false,false,false,false ,
+        false,false,false,false
+};
+
+    //[SerializeField]
     Transform[] childrocks;
 
     // Start is called before the first frame update
@@ -65,14 +92,31 @@ public class o_RockManager : MonoBehaviour
     {
         for (int listNum = 0; listNum < rocksCol; listNum++)
         {
-            list_rocksR.Add(rocks[((int)MOVE.RIGHT), listNum]);
+            list_rocksR.Add(new o_Rock[] { null, null, null, null });
         }
         for (int listNum = 0; listNum < rocksCol; listNum++)
         {
-            list_rocksL.Add(rocks[((int)MOVE.LEFT), listNum]);
+            list_rocksL.Add(new o_Rock[] { null, null, null, null });
         }
 
-        //rocks = new Rock[rocksCol, rocksRow];
+        for (int i = 0; i < 8; i++)
+        {
+            for (int j = 0; j < 4; j++)
+            {
+                if (CreateRocksR[i * 4 + j])
+                {
+                    GameObject createObj = Instantiate(rockPrefab);
+                    createObj.transform.localScale = Vector3.one;
+                    SetRock(createObj.GetComponent<o_Rock>(), MOVE.RIGHT, i, j);
+                }
+                if (CreateRocksL[i * 4 + j])
+                {
+                    GameObject createObj = Instantiate(rockPrefab);
+                    createObj.transform.localScale = Vector3.one;
+                    SetRock(createObj.GetComponent<o_Rock>(), MOVE.LEFT, i, j);
+                }
+            }
+        }
     }
 
     // Update is called once per frame
@@ -233,6 +277,7 @@ public class o_RockManager : MonoBehaviour
                 //
                 rockA.Move(moveToRockManager,(MOVE)adr2[0],adr2[1], adr2[2],CalcMoveToPosition(adr2[0], adr2[1], adr2[2]));
                 moveToRockManager.list_rocksR[adr2[1]][adr2[2]].CalcMass();
+                CalcMassRL();
                 return true;
                 break;
             case (int)MOVE.LEFT:
@@ -296,6 +341,7 @@ public class o_RockManager : MonoBehaviour
 
                 rockA.Move(moveToRockManager, (MOVE)adr2[0],adr2[1], adr2[2],CalcMoveToPosition(adr2[0], adr2[1], adr2[2]));
                 moveToRockManager.list_rocksL[adr2[1]][adr2[2]].CalcMass();
+                CalcMassRL();
                 return true;
                 break;
         }
