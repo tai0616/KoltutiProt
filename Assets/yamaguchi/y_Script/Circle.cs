@@ -5,7 +5,7 @@ using UnityEngine;
 public class Circle : MonoBehaviour
 {
     public GameObject obj;
-    public GameObject Camera;
+    public Camera camera;
     public float radius;
 
     public float Camera_radius;
@@ -19,17 +19,30 @@ public class Circle : MonoBehaviour
 
     bool actionMode_ = false;
     MoveCamera sc_;
+
+    private RaycastHit hit; //レイキャストが当たったものを取得する入れ物
     // Use this for initialization
     void Start()
     {
         zPosition = 0.5f;
-        sc_ = Camera.GetComponent<MoveCamera>();
+        sc_ = camera.GetComponent<MoveCamera>();
         Camera_radius = 6.0f;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetMouseButtonDown(0)) //マウスがクリックされたら
+        {
+            Ray ray = camera.ScreenPointToRay(Input.mousePosition); //マウスのポジションを取得してRayに代入
+
+            if (Physics.Raycast(ray, out hit))  //マウスのポジションからRayを投げて何かに当たったらhitに入れる
+            {
+                string objectName = hit.collider.gameObject.name; //オブジェクト名を取得して変数に入れる
+                Debug.Log(objectName); //オブジェクト名をコンソールに表示
+            }
+        }
+
         if (Input.GetKeyDown(KeyCode.Q))
         {
             actionMode_ = !actionMode_;
@@ -69,6 +82,10 @@ public class Circle : MonoBehaviour
             y = radius * Mathf.Cos(angle_) + obj.transform.position.y;
 
             transform.position = new Vector3(x, y, z);
+
+            Vector3 _look = obj.transform.position;
+            _look.z = z;
+            this.transform.LookAt(_look);
         }
         else
         {
@@ -96,7 +113,7 @@ public class Circle : MonoBehaviour
             z = zPosition + obj.transform.position.z;
             y = (radius + Camera_radius) * Mathf.Cos(angle_) + obj.transform.position.y;
             
-            Camera.transform.position = new Vector3(x, y, z);
+            camera.transform.position = new Vector3(x, y, z);
 
         }
     }
