@@ -148,14 +148,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 141091166}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0.0075139706, w: 0.99997175}
+  m_LocalPosition: {x: 0.000056654215, y: 0.007514064, z: 0}
   m_LocalScale: {x: 4, y: 4, z: 4}
   m_Children:
   - {fileID: 1211734340}
   m_Father: {fileID: 0}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -0.86100006}
 --- !u!65 &141091168
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -232,9 +232,10 @@ MonoBehaviour:
   rocksRow: 4
   massR: 0
   massL: 0
+  massCoe: 2
   frontRM: {fileID: 2125727094}
   backRM: {fileID: 1892074437}
-  a: 0
+  childrocks: []
 --- !u!114 &1211734336 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7234555252352095147, guid: ff498b2d54405bb41aae958176e09087,
@@ -464,9 +465,10 @@ MonoBehaviour:
   rocksRow: 4
   massR: 0
   massL: 0
+  massCoe: 2
   frontRM: {fileID: 141091171}
   backRM: {fileID: 0}
-  a: 0
+  childrocks: []
 --- !u!65 &1892074438
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -576,9 +578,10 @@ MonoBehaviour:
   rockCol: 2
   rockRow: 0
   destroyRock: {fileID: 0}
+  rotateRocks: 180
   rockPrefab: {fileID: 7234555252352095188, guid: ff498b2d54405bb41aae958176e09087,
     type: 3}
-  CreateRocksR: 0101010100000000000000000000000000000000000000000000000000000000
+  CreateRocksR: 0101000100000000000000000000000000000000000000000000000000000000
 --- !u!4 &1900584655
 Transform:
   m_ObjectHideFlags: 0
@@ -629,9 +632,10 @@ MonoBehaviour:
   rocksRow: 4
   massR: 0
   massL: 0
+  massCoe: 2
   frontRM: {fileID: 0}
   backRM: {fileID: 141091171}
-  a: 0
+  childrocks: []
 --- !u!65 &2125727095
 BoxCollider:
   m_ObjectHideFlags: 0

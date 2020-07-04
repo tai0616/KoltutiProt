@@ -57,8 +57,8 @@ public class o_RockManager : MonoBehaviour
     [SerializeField]
     o_RockManager backRM=null;
 
-    [SerializeField, Tooltip("a")]
-    int a; 
+    [SerializeField]
+    Transform[] childrocks;
 
     // Start is called before the first frame update
     void Start()
@@ -295,7 +295,7 @@ public class o_RockManager : MonoBehaviour
                 }
 
                 rockA.Move(moveToRockManager, (MOVE)adr2[0],adr2[1], adr2[2],CalcMoveToPosition(adr2[0], adr2[1], adr2[2]));
-                moveToRockManager.list_rocksR[adr2[1]][adr2[2]].CalcMass();
+                moveToRockManager.list_rocksL[adr2[1]][adr2[2]].CalcMass();
                 return true;
                 break;
         }
@@ -394,6 +394,56 @@ public class o_RockManager : MonoBehaviour
                     massL += list_rocksL[colum][row].massR;
                 }
             }
+        }
+    }
+
+    public void RotateRocks(int rotate)
+    {
+        int movelist = (int)(rocksCol * rotate / 180);
+        Debug.Log("rotate:" + movelist);
+        if (movelist < 0)
+        {
+            for (int i = 0; i > movelist; i--)
+            {
+                list_rocksR.Insert(0, list_rocksL[0]);
+                list_rocksL.RemoveAt(0);
+                list_rocksL.Add(list_rocksR[rocksCol]);
+                list_rocksR.RemoveAt(rocksCol);
+            }
+        }
+        else
+        {
+            for (int i = 0; i < movelist; i++)
+            {
+                
+                list_rocksL.Insert(0, list_rocksR[0]);
+                list_rocksR.RemoveAt(0);
+                list_rocksR.Add(list_rocksL[rocksCol]);
+                list_rocksL.RemoveAt(rocksCol);
+            }
+        }
+
+        childrocks = new Transform[transform.childCount];
+        for (int i = 0,childCnt= transform.childCount; i < childCnt; i++)
+        {
+            childrocks[i] = transform.GetChild(0);
+            childrocks[i].parent = null;
+        }
+        transform.rotation = Quaternion.identity;
+        for (int i = 0, childCnt = childrocks.Length; i < childCnt; i++)
+        {
+            childrocks[i].parent = transform;
+        }
+
+        CalcMassRL();
+    }
+
+    public void SetRocksTrans()
+    {
+        childrocks = new Transform[transform.childCount];
+        for (int i = 0, childCnt = transform.childCount; i < childCnt; i++)
+        {
+            childrocks[i] = transform.GetChild(0);
         }
     }
 }

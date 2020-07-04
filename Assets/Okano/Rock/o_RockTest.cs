@@ -17,6 +17,8 @@ public class o_RockTest : MonoBehaviour
     o_Rock destroyRock = null;
 
     [SerializeField]
+    int rotateRocks = 180;
+    [SerializeField]
     GameObject rockPrefab = null;
     [SerializeField]
     bool[] CreateRocksR = new bool[32]
@@ -77,9 +79,19 @@ public class o_RockTest : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.M))
         {
+            moveRockM.SetRocksTrans();
             moveRockM.CalcMassRL();
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            RotateRocksTest();
         }
     }
 
-
+    void RotateRocksTest()
+    {
+        moveRockM.transform.Rotate(new Vector3(0, 0, rotateRocks));
+        moveRockM.RotateRocks(rotateRocks);
+    }
 }
