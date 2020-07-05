@@ -167,7 +167,7 @@ public class KyojyuManager : MonoBehaviour
         }
 
 
-        Debug.Log(Kyojyu_Dont_Sidemove);
+        //Debug.Log(Kyojyu_Dont_Sidemove);
 
         //巨獣がケンジャクで動いた後で数秒間動けない
         if (Kyojyu_Dont_Sidemove == true)
