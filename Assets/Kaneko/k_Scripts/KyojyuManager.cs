@@ -45,6 +45,7 @@ public class KyojyuManager : MonoBehaviour
     //private bool first_rock = true;
 
     private float Body_rotation = 0;
+    private float Save_rotation = 0;
 
     public bool Kyojyu_rotation_now = false;
 
@@ -95,6 +96,8 @@ public class KyojyuManager : MonoBehaviour
                     movenow = true;
 
                     hogetime = 0;
+                    Body_rotation = 0;
+                    Save_rotation = BodyObj[0].transform.localEulerAngles.z;
                 }
                 else if (L_weight > R_weight)//左の方が重かった時
                 {
@@ -102,6 +105,8 @@ public class KyojyuManager : MonoBehaviour
                     movenow = true;
 
                     hogetime = 0;
+                    Body_rotation = 0;
+                    Save_rotation = BodyObj[0].transform.localEulerAngles.z;
                 }
                 else//重さが等しい時 
                 {
@@ -111,6 +116,8 @@ public class KyojyuManager : MonoBehaviour
                         movenow = true;
 
                         hogetime = 0;
+                        Body_rotation = 0;
+                        Save_rotation = BodyObj[0].transform.localEulerAngles.z;
                     }
                     else if (L_old_weight > R_old_weight)//前の左の方が重かった時
                     {
@@ -118,6 +125,8 @@ public class KyojyuManager : MonoBehaviour
                         movenow = true;
 
                         hogetime = 0;
+                        Body_rotation = 0;
+                        Save_rotation = BodyObj[0].transform.localEulerAngles.z;
                     }
                 }
                 KyojyuuRb.velocity = Vector3.zero;
@@ -136,8 +145,13 @@ public class KyojyuManager : MonoBehaviour
 
             Kyojyu_Dont_Sidemove = true;
             hogetime = 0;
+
+            Body_rotation = 0;
+            Save_rotation = BodyObj[0].transform.localEulerAngles.z;
+
         }
-        else if (L_weight - R_weight * 2 >= 0 && movenow == false && Kyojyu_Dont_Sidemove == false)
+
+        if (L_weight - R_weight * 2 >= 0 && movenow == false && Kyojyu_Dont_Sidemove == false)
         {
             next_RailNumber--;
             movenow = true;
@@ -146,19 +160,24 @@ public class KyojyuManager : MonoBehaviour
 
             Kyojyu_Dont_Sidemove = true;
             hogetime = 0;
+
+            Body_rotation = 0;
+            Save_rotation = BodyObj[0].transform.localEulerAngles.z;
+
         }
 
+
+        Debug.Log(Kyojyu_Dont_Sidemove);
 
         //巨獣がケンジャクで動いた後で数秒間動けない
         if (Kyojyu_Dont_Sidemove == true)
         {
             time += Time.deltaTime;
 
-            if (time >= Dontmove_time)
+            if (time > Dontmove_time)
             {
-                //Debug.Log(time);
-                Kyojyu_Dont_Sidemove = false;
                 time = 0;
+                Kyojyu_Dont_Sidemove = false;
             }
         }
 
@@ -166,34 +185,73 @@ public class KyojyuManager : MonoBehaviour
         //横に移動処理
         if (movenow == true)//横に移動中
         {
-
-            //点滅処理
+            
             hogetime += Time.deltaTime;
 
+            //点滅処理
             Color _color = BodyObj[0].GetComponent<Renderer>().material.color;
             if (hogetime <= tenmethu_time)
             {
-                alpha_Sin = Mathf.Sin(Time.time) / 2 + 0.1f;
+                alpha_Sin = Mathf.Sin(Time.time) / 1.2f + 0.1f;
                 _color.a = alpha_Sin;
             }
-            else {
+            else
+            {
                 _color.a = 1.0f;
             }
             BodyObj[0].GetComponent<Renderer>().material.color = _color;
 
-            // コルーチンを実行
-            StartCoroutine("testtimer", 10);
 
+            //巨獣の動き＋回転
+            if (next_RailNumber - now_RailNumber > 0)//右に移動
+            {
+                KyojyuuRb.AddForce(side_move_speed, 0, 0);
+
+                if (hogetime >= tenmethu_time)//点滅終わったら
+                {
+                    if (Body_rotation > -180.0f)
+                    {
+                        Body_rotation -= 0.2f;
+                    }
+                    else
+                    {
+                        Body_rotation = -180;
+                    }
+                }
+
+                RightStopHantei();
+            }
+            else//左に移動
+            {
+                KyojyuuRb.AddForce(-side_move_speed, 0, 0);
+
+                if (hogetime >= tenmethu_time)//点滅終わったら
+                {
+                    if (Body_rotation < 180.0f)
+                    {
+                        Body_rotation += 0.2f;
+                    }
+                    else
+                    {
+                        Body_rotation = 180;
+                    }
+                }
+
+                LeftStopHantei();
+            }
+
+            BodyObj[0].transform.rotation = Quaternion.Euler(0, 0, Save_rotation + Body_rotation);
 
         }
 
+        //Debug.Log(Body_rotation);
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "MountainRock")
         {
-            Destroy(this.gameObject);
+            //Destroy(this.gameObject);
         }
     }
 
@@ -320,29 +378,6 @@ public class KyojyuManager : MonoBehaviour
         }
     }
 
-    IEnumerator testtimer(int lefttime)
-    {
-
-        if (next_RailNumber - now_RailNumber > 0)//右に移動
-        {
-            KyojyuuRb.AddForce(side_move_speed, 0, 0);
-            Body_rotation -= 0.5f;
-
-            RightStopHantei();
-        }
-        else//左に移動
-        {
-            KyojyuuRb.AddForce(-side_move_speed, 0, 0);
-            Body_rotation += 0.5f;
-
-            LeftStopHantei();
-        }
-
-        yield return new WaitForSeconds(tenmethu_time);//数秒点滅して待つ
-
-        //_color.a = 255.0f;
-        BodyObj[0].transform.rotation = Quaternion.Euler(0, 0, Body_rotation);
-    }
 
 }
 
