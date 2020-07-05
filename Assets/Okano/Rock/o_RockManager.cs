@@ -58,30 +58,34 @@ public class o_RockManager : MonoBehaviour
     o_RockManager backRM=null;
 
     [SerializeField]
-    GameObject rockPrefab = null;
+    GameObject rockPrefab1 = null;
     [SerializeField]
-    bool[] CreateRocksR = new bool[32]
+    GameObject rockPrefab2 = null;
+    [SerializeField]
+    GameObject rockPrefab3 = null;
+    [SerializeField]
+    int[] CreateRocksR = new int[32]
 {
-        false,false,false,false ,
-        false,false,false,false ,
-        false,false,false,false ,
-        false,false,false,false ,
-        false,false,false,false ,
-        false,false,false,false ,
-        false,false,false,false ,
-        false,false,false,false
+        0,0,0,0 ,
+        0,0,0,0 ,
+        0,0,0,0 ,
+        0,0,0,0 ,
+        0,0,0,0 ,
+        0,0,0,0 ,
+        0,0,0,0 ,
+        0,0,0,0
 };
     [SerializeField]
-    bool[] CreateRocksL = new bool[32]
+    int[] CreateRocksL = new int[32]
 {
-        false,false,false,false ,
-        false,false,false,false ,
-        false,false,false,false ,
-        false,false,false,false ,
-        false,false,false,false ,
-        false,false,false,false ,
-        false,false,false,false ,
-        false,false,false,false
+        0,0,0,0 ,
+        0,0,0,0 ,
+        0,0,0,0 ,
+        0,0,0,0 ,
+        0,0,0,0 ,
+        0,0,0,0 ,
+        0,0,0,0 ,
+        0,0,0,0
 };
 
     //[SerializeField]
@@ -103,15 +107,47 @@ public class o_RockManager : MonoBehaviour
         {
             for (int j = 0; j < 4; j++)
             {
-                if (CreateRocksR[i * 4 + j])
+                if (CreateRocksR[i * rocksRow + j] != 0)
                 {
-                    GameObject createObj = Instantiate(rockPrefab);
+                    GameObject createObj;
+                    switch (CreateRocksR[i * rocksRow + j])
+                    {
+                        case 1:
+                            createObj = Instantiate(rockPrefab1);
+                            break;
+                        case 2:
+                            createObj = Instantiate(rockPrefab2);
+                            break;
+                        case 3:
+                            createObj = Instantiate(rockPrefab3);
+                            break;
+                        default:
+                            createObj = Instantiate(rockPrefab1);
+                            break;
+                    }
+                    while (createObj.GetComponent<o_Rock>() == null) { };
                     SetRock(createObj.GetComponent<o_Rock>(), MOVE.RIGHT, i, j);
                     createObj.transform.localScale = new Vector3(1.0f / (rocksCol / 2.0f), 1.0f / (rocksCol / 2.0f), 1.0f / (rocksCol / 2.0f));
                 }
-                if (CreateRocksL[i * 4 + j])
+                if (CreateRocksL[i * 4 + j] != 0)
                 {
-                    GameObject createObj = Instantiate(rockPrefab);
+                    GameObject createObj;
+                    switch (CreateRocksL[i * 4 + j])
+                    {
+                        case 1:
+                            createObj = Instantiate(rockPrefab1);
+                            break;
+                        case 2:
+                            createObj = Instantiate(rockPrefab2);
+                            break;
+                        case 3:
+                            createObj = Instantiate(rockPrefab3);
+                            break;
+                        default:
+                            createObj = Instantiate(rockPrefab1);
+                            break;
+                    }
+                    while (createObj.GetComponent<o_Rock>() == null) { };
                     SetRock(createObj.GetComponent<o_Rock>(), MOVE.LEFT, i, j);
                     createObj.transform.localScale = new Vector3(1.0f / (rocksCol / 2.0f), 1.0f / (rocksCol / 2.0f), 1.0f / (rocksCol / 2.0f));
                 }
