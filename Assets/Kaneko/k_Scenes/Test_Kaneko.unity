@@ -2638,9 +2638,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ray_distance: 50
   ray_startpos: {fileID: 8962128707508888082}
-  speed: 1000
-  side_move_speed: 1000
-  Dontmove_time: 15
+  speed: 1500
+  side_move_speed: 1500
+  Dontmove_time: 25
   R_weight: 3
   L_weight: 3
   R_old_weight: 2
@@ -2689,7 +2689,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8962128706929576750}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 100, y: -59.609962, z: 256}
+  m_LocalPosition: {x: 100, y: -59.609962, z: 283}
   m_LocalScale: {x: 16.765, y: 16.765, z: 16.765}
   m_Children: []
   m_Father: {fileID: 1727763046}
