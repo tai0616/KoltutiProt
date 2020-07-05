@@ -155,9 +155,13 @@ MonoBehaviour:
   ray_startpos: {fileID: 51246923}
   speed: 2500
   side_move_speed: 2500
+  Dontmove_time: 0
   R_weight: 3
   L_weight: 4
+  R_old_weight: 0
+  L_old_weight: 0
   Kyojyu_rotation_now: 0
+  tenmethu_time: 0
 --- !u!54 &26666889
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1775,7 +1779,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   obj: {fileID: 26666887}
-  Camera: {fileID: 1907812380}
+  camera: {fileID: 1907812382}
   radius: 7
   Camera_radius: 0.48
 --- !u!136 &1775004956
@@ -2136,6 +2140,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Player: {fileID: 1775004954}
+  c_forward: 0
+  c_up: 0
 --- !u!1 &1981212478
 GameObject:
   m_ObjectHideFlags: 0
