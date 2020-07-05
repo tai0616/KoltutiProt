@@ -17,6 +17,8 @@ public class o_RockTest : MonoBehaviour
     o_Rock destroyRock = null;
 
     [SerializeField]
+    int rotateRocks = 180;
+    [SerializeField]
     GameObject rockPrefab = null;
     [SerializeField]
     bool[] CreateRocksR = new bool[32]
@@ -36,18 +38,18 @@ public class o_RockTest : MonoBehaviour
     {
         moveRockM.SetRock(moveRock,right_left ,rockCol, rockRow);
 
-        for(int i = 0; i < 8; i++)
-        {
-            for (int j = 0; j < 4; j++)
-            {
-                if (CreateRocksR[i*4+j])
-                {
-                    GameObject createObj = Instantiate(rockPrefab);
-                    createObj.transform.localScale = Vector3.one;
-                    moveRockM.SetRock(createObj.GetComponent<o_Rock>(), o_RockManager.MOVE.RIGHT, i, j);
-                }
-            }
-        }
+        //for(int i = 0; i < 8; i++)
+        //{
+        //    for (int j = 0; j < 4; j++)
+        //    {
+        //        if (CreateRocksR[i*4+j])
+        //        {
+        //            GameObject createObj = Instantiate(rockPrefab);
+        //            createObj.transform.localScale = Vector3.one;
+        //            moveRockM.SetRock(createObj.GetComponent<o_Rock>(), o_RockManager.MOVE.RIGHT, i, j);
+        //        }
+        //    }
+        //}
     }
 
     // Update is called once per frame
@@ -77,9 +79,19 @@ public class o_RockTest : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.M))
         {
+            moveRockM.SetRocksTrans();
             moveRockM.CalcMassRL();
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            RotateRocksTest();
         }
     }
 
-
+    void RotateRocksTest()
+    {
+        moveRockM.transform.Rotate(new Vector3(0, 0, rotateRocks));
+        moveRockM.RotateRocks(rotateRocks);
+    }
 }
