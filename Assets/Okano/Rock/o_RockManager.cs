@@ -106,13 +106,13 @@ public class o_RockManager : MonoBehaviour
                 if (CreateRocksR[i * 4 + j])
                 {
                     GameObject createObj = Instantiate(rockPrefab);
-                    createObj.transform.localScale = Vector3.one;
+                    //createObj.transform.localScale = Vector3.one;
                     SetRock(createObj.GetComponent<o_Rock>(), MOVE.RIGHT, i, j);
                 }
                 if (CreateRocksL[i * 4 + j])
                 {
                     GameObject createObj = Instantiate(rockPrefab);
-                    createObj.transform.localScale = Vector3.one;
+                    //createObj.transform.localScale = Vector3.one;
                     SetRock(createObj.GetComponent<o_Rock>(), MOVE.LEFT, i, j);
                 }
             }
