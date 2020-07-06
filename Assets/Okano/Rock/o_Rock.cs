@@ -41,34 +41,89 @@ public class o_Rock : MonoBehaviour
     //外部参照用Player用　岩移動要求
     public bool RockMove(o_RockManager.MOVE caseMove)
     {
-        //test
-        //{
-        //if (rockManager.RockMoveM(this/*,colum*/, row, caseMove))
-        //{
-        //switch (caseMove)
-        //{
-        //    case o_RockManager.MOVE.UP:
-        //        transform.Translate(0, 1, 0);
-        //        break;
-
-        //    case o_RockManager.MOVE.DOWN:
-        //        transform.Translate(0, -1, 0);
-        //        break;
-
-        //    case o_RockManager.MOVE.FRONT:
-        //        transform.Translate(0, 0, 1);
-        //        break;
-
-        //    case o_RockManager.MOVE.BACK:
-        //        transform.Translate(0, 0, -1);
-        //        break;
-        //}
-        //return true;
-        //    }
-        //    return false;
-        //}
         if (!canMove) return false;
+
         return rockManager.RockMoveM(this/*,colum*/, row, caseMove);
+    }
+    public bool RockMove(Vector3 vec3)
+    {
+        if (!canMove) return false;
+
+        o_RockManager.MOVE caseMove;
+
+        if (vec3 == Vector3.forward)
+        {
+            caseMove = o_RockManager.MOVE.FRONT;
+        }
+        else if (vec3 == Vector3.back)
+        {
+            caseMove = o_RockManager.MOVE.BACK;
+        }
+        else if (vec3 == Vector3.up)
+        {
+            caseMove = o_RockManager.MOVE.UP;
+        }
+        else if (vec3 == Vector3.down)
+        {
+            caseMove = o_RockManager.MOVE.DOWN;
+        }
+        else if (vec3 == Vector3.right)
+        {
+            if (right_left == o_RockManager.MOVE.RIGHT)
+            {
+                if (row < rockManager.rocksCol / 2)
+                {
+                    caseMove = o_RockManager.MOVE.DOWN;
+                }
+                else
+                {
+                    caseMove = o_RockManager.MOVE.UP;
+                }
+            }
+            else
+            {
+                if (row < rockManager.rocksCol / 2)
+                {
+                    caseMove = o_RockManager.MOVE.UP;
+                }
+                else
+                {
+                    caseMove = o_RockManager.MOVE.DOWN;
+                }
+            }
+        }
+        else if (vec3 == Vector3.left)
+        {
+            if (right_left == o_RockManager.MOVE.RIGHT)
+            {
+                if (row < rockManager.rocksCol / 2)
+                {
+                    caseMove = o_RockManager.MOVE.UP;
+                }
+                else
+                {
+                    caseMove = o_RockManager.MOVE.DOWN;
+                }
+            }
+            else
+            {
+                if (row < rockManager.rocksCol / 2)
+                {
+                    caseMove = o_RockManager.MOVE.DOWN;
+                }
+                else
+                {
+                    caseMove = o_RockManager.MOVE.UP;
+                }
+            }
+        }
+        else
+        {
+            Debug.Log("Argument is invalid");
+            return false;
+        }
+
+        return rockManager.RockMoveM(this, row, caseMove);
     }
 
     //RockManager用
