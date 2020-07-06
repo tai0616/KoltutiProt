@@ -81,7 +81,7 @@ public class KyojyuManager : MonoBehaviour
         if (Rotation_stop == true)//回転が終わった時に一度だけ実行処理
         {
             Rotation_stop = false;
-            o_RockM1.GetComponent<o_RockManager>().RotateRocks((int)BodyObj[0].transform.localEulerAngles.z);
+            o_RockM1.GetComponent<o_RockManager>().RotateRocks((int)Body_rotation);
         }
 
         //RとLが動かせる古い情報を格納
