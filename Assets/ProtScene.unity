@@ -619,6 +619,8 @@ MonoBehaviour:
   camera: {fileID: 1915097469}
   radius: 7
   Camera_radius: 0.48
+  _break: {fileID: 2100000, guid: f7dbdfa6337939d48bb374baf6f18fcc, type: 2}
+  _Idou: {fileID: 2100000, guid: 8119d53eb25fd1d4ab39880bd016347f, type: 2}
 --- !u!136 &231312799
 CapsuleCollider:
   m_ObjectHideFlags: 0

@@ -18,8 +18,14 @@ public class Circle : MonoBehaviour
     float angle_ = 0.0f;
 
     bool actionMode_ = false;
+    o_Rock rock_;
+    bool Keeprock_ = false;
+
+    bool hakai_ = true;
     MoveCamera sc_;
 
+    public Material _break;
+    public Material _Idou;
     private RaycastHit hit; //レイキャストが当たったものを取得する入れ物
     // Use this for initialization
     void Start()
@@ -32,22 +38,14 @@ public class Circle : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0)) //マウスがクリックされたら
-        {
-            Ray ray = camera.ScreenPointToRay(Input.mousePosition); //マウスのポジションを取得してRayに代入
-
-            if (Physics.Raycast(ray, out hit))  //マウスのポジションからRayを投げて何かに当たったらhitに入れる
-            {
-                string objectName = hit.collider.gameObject.name; //オブジェクト名を取得して変数に入れる
-                Debug.Log(objectName); //オブジェクト名をコンソールに表示
-            }
-        }
-
+       
+ 
         if (Input.GetKeyDown(KeyCode.Q))
         {
             actionMode_ = !actionMode_;
             sc_.ModeChange();
-
+            rock_ = null;
+            Keeprock_ = false;
         }
         if (!actionMode_)
         {
@@ -89,19 +87,120 @@ public class Circle : MonoBehaviour
         }
         else
         {
-            
-            if (Input.GetKey(KeyCode.W))
+            if (Input.GetKeyDown(KeyCode.K))
             {
-                radius -= 4.0f * Time.deltaTime;
-                //this.transform.Translate(-0.1f, 0.0f, 0.0f);
+                hakai_ = !hakai_;
+                Keeprock_ = false;
+                if (hakai_)
+                {
+                    var kari = this.GetComponent<MeshRenderer>();
+                    kari.material = _break;
+                }
+                else
+                {
+                    var kari = this.GetComponent<MeshRenderer>();
+                    kari.material = _Idou;
+                }
             }
 
-            if (Input.GetKey(KeyCode.S))
+            if (Input.GetMouseButtonDown(0)) //マウスがクリックされたら
             {
-                radius += 4.0f * Time.deltaTime;
-                //this.transform.Translate(-0.1f, 0.0f, 0.0f);
+                Ray ray = camera.ScreenPointToRay(Input.mousePosition); //マウスのポジションを取得してRayに代入
+
+                if (Physics.Raycast(ray, out hit))  //マウスのポジションからRayを投げて何かに当たったらhitに入れる
+                {
+                    string objectName = hit.collider.gameObject.name; //オブジェクト名を取得して変数に入れる
+                    if (hakai_)
+                    {
+                       rock_ = hit.collider.gameObject.GetComponent<o_Rock>();
+                        rock_.RockDestroy();
+                    }
+                    else
+                    {
+                        rock_ = hit.collider.gameObject.GetComponent<o_Rock>();
+                        //rock_.RockDestroy();
+                        Keeprock_ = true;
+                    }
+                }
             }
 
+            if (Keeprock_)
+            {
+                if (Input.GetKeyDown(KeyCode.W))
+                {
+                    Debug.Log(transform.localEulerAngles.y);
+                    if (transform.transform.localEulerAngles.y > 269)
+                    {
+                        
+                        angle_ -= 0.3f;
+                        rock_.RockMove(o_RockManager.MOVE.UP);
+                    }
+                    else
+                    {
+                        angle_ += 0.3f;
+                        rock_.RockMove(o_RockManager.MOVE.UP);
+                    }
+                }
+
+                if (Input.GetKeyDown(KeyCode.S))
+                {
+                    Debug.Log(transform.transform.localEulerAngles.y);
+                    if (transform.localEulerAngles.y > 269)
+                    {
+                        angle_ += 0.3f;
+                        rock_.RockMove(o_RockManager.MOVE.DOWN);
+                    }
+                    else
+                    {
+                        angle_ -= 0.3f;
+                        rock_.RockMove(o_RockManager.MOVE.DOWN);
+                    }
+                }
+
+                if (Input.GetKeyDown(KeyCode.A))
+                {
+                    Debug.Log(transform.transform.localEulerAngles.y);
+                    if (transform.localEulerAngles.y < 269)
+                    {
+                        zPosition += 0.5f;
+                        rock_.RockMove(o_RockManager.MOVE.FRONT);
+                    }
+                    else
+                    {
+                        zPosition -= 0.5f;
+                        rock_.RockMove(o_RockManager.MOVE.BACK);
+                    }
+                }
+
+                if (Input.GetKeyDown(KeyCode.D))
+                {
+                    Debug.Log(transform.transform.localEulerAngles.y);
+                    if (transform.localEulerAngles.y > 269)
+                    {
+                        zPosition += 0.5f;
+                        rock_.RockMove(o_RockManager.MOVE.FRONT);
+                    }
+                    else
+                    {
+                        zPosition -= 0.5f;
+                        rock_.RockMove(o_RockManager.MOVE.BACK);
+                    }
+                }
+            }
+            else
+            {
+                if (Input.GetKey(KeyCode.W))
+                {
+                    radius -= 4.0f * Time.deltaTime;
+                    //this.transform.Translate(-0.1f, 0.0f, 0.0f);
+                }
+
+                if (Input.GetKey(KeyCode.S))
+                {
+                    radius += 4.0f * Time.deltaTime;
+                    //this.transform.Translate(-0.1f, 0.0f, 0.0f);
+                }
+            }
             x = radius * Mathf.Sin(angle_) + obj.transform.position.x;
             z = zPosition + obj.transform.position.z;
             y = radius * Mathf.Cos(angle_) + obj.transform.position.y;

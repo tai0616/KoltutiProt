@@ -6,6 +6,7 @@ public class MoveCamera : MonoBehaviour
 {
     public GameObject Player;
     private bool ActionMode_;
+
     public float c_forward;
     public float c_up;
     float angle_;
