@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8336037191791790633}
   m_Layer: 0
   m_Name: o_Rock 2
-  m_TagString: Untagged
+  m_TagString: tagRock
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -116,3 +116,5 @@ MonoBehaviour:
   row: 1
   ridingRock: {fileID: 0}
   ridedRock: {fileID: 0}
+  o_RockUP_Prefab: {fileID: 3697976919618875189, guid: 2d7621e706d21644ca74d75cdae3bc87,
+    type: 3}
