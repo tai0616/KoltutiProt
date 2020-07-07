@@ -250,5 +250,13 @@ public class o_Rock : MonoBehaviour
     {
         o_RockUP.SetActive(false);
     }
+    public bool ChangingMove()
+    {
+        if (colum == 0 || colum == rockManager.rocksCol - 1)
+        {
+            return true;
+        }
 
+        return false;
+    }
 }
