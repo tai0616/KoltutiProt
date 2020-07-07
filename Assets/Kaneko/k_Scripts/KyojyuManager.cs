@@ -53,6 +53,11 @@ public class KyojyuManager : MonoBehaviour
     private float alpha_Sin;
     private float hogetime;
 
+
+    //回転が終わった時に一度だけ実行処理
+    private bool Rotation_stop = false;
+    private GameObject o_RockM1;
+
     private void Start()
     {
         KyojyuuRb = GetComponent<Rigidbody>();
@@ -63,6 +68,8 @@ public class KyojyuManager : MonoBehaviour
         BodyObj[2] = transform.Find("Body03").gameObject;
         BodyObj[3] = transform.Find("Body04").gameObject;
 
+        o_RockM1 = BodyObj[0].transform.Find("o_RockM1").gameObject;
+
     }
 
     private void Update()
@@ -70,6 +77,12 @@ public class KyojyuManager : MonoBehaviour
         KyojyuuRb.AddForce(0, 0, speed);
 
         Kyojyu_rotation_now = movenow;//今は横に動いてるとき常に回転している
+
+        if (Rotation_stop == true)//回転が終わった時に一度だけ実行処理
+        {
+            Rotation_stop = false;
+            o_RockM1.GetComponent<o_RockManager>().RotateRocks((int)BodyObj[0].transform.localEulerAngles.z);
+        }
 
         //RとLが動かせる古い情報を格納
         if (R_weight != L_weight)
@@ -267,6 +280,7 @@ public class KyojyuManager : MonoBehaviour
 
                 now_RailNumber = next_RailNumber;
                 movenow = false;
+                Rotation_stop = true;
             }
         }
         else if (next_RailNumber == 2)
@@ -279,6 +293,7 @@ public class KyojyuManager : MonoBehaviour
 
                 now_RailNumber = next_RailNumber;
                 movenow = false;
+                Rotation_stop = true;
             }
         }
         else if (next_RailNumber == 3)
@@ -290,6 +305,7 @@ public class KyojyuManager : MonoBehaviour
 
                 now_RailNumber = next_RailNumber;
                 movenow = false;
+                Rotation_stop = true;
             }
         }
         else if (next_RailNumber == 4)
@@ -301,6 +317,7 @@ public class KyojyuManager : MonoBehaviour
 
                 now_RailNumber = next_RailNumber;
                 movenow = false;
+                Rotation_stop = true;
             }
 
         }
@@ -313,6 +330,7 @@ public class KyojyuManager : MonoBehaviour
 
                 now_RailNumber = next_RailNumber;
                 movenow = false;
+                Rotation_stop = true;
             }
         }
 
@@ -329,6 +347,7 @@ public class KyojyuManager : MonoBehaviour
 
                 now_RailNumber = next_RailNumber;
                 movenow = false;
+                Rotation_stop = true;
             }
         }
         else if (next_RailNumber == 2)
@@ -340,6 +359,7 @@ public class KyojyuManager : MonoBehaviour
 
                 now_RailNumber = next_RailNumber;
                 movenow = false;
+                Rotation_stop = true;
             }
         }
         else if (next_RailNumber == 3)
@@ -351,6 +371,7 @@ public class KyojyuManager : MonoBehaviour
 
                 now_RailNumber = next_RailNumber;
                 movenow = false;
+                Rotation_stop = true;
             }
         }
         else if (next_RailNumber == 4)
@@ -362,6 +383,7 @@ public class KyojyuManager : MonoBehaviour
 
                 now_RailNumber = next_RailNumber;
                 movenow = false;
+                Rotation_stop = true;
             }
 
         }
@@ -374,6 +396,7 @@ public class KyojyuManager : MonoBehaviour
 
                 now_RailNumber = next_RailNumber;
                 movenow = false;
+                Rotation_stop = true;
             }
         }
     }

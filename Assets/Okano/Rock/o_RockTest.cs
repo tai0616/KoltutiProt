@@ -87,6 +87,14 @@ public class o_RockTest : MonoBehaviour
         {
             RotateRocksTest();
         }
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            moveRock.OnSelected();
+        }
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            moveRock.OffSelected();
+        }
     }
 
     void RotateRocksTest()

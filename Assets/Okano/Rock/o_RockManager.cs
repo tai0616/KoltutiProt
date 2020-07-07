@@ -14,7 +14,7 @@ public class o_RockManager : MonoBehaviour
         BACK
     }
     [SerializeField]
-    int rocksCol = 8;
+    public int rocksCol = 8;
     [SerializeField]
     int rocksRow = 4;
     [SerializeField]
