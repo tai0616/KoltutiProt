@@ -118,7 +118,7 @@ public class Circle : MonoBehaviour
                     else
                     {
                         rock_ = hit.collider.gameObject.GetComponent<o_Rock>();
-                        //rock_.RockDestroy();
+                        rock_.OnSelected();
                         Keeprock_ = true;
                     }
                 }
@@ -133,12 +133,14 @@ public class Circle : MonoBehaviour
                     {
                         
                         angle_ -= 0.3f;
-                        rock_.RockMove(o_RockManager.MOVE.UP);
+                        //rock_.RockMove(o_RockManager.MOVE.UP);
+                        rock_.RockMove(Vector3.up);
                     }
                     else
                     {
                         angle_ += 0.3f;
-                        rock_.RockMove(o_RockManager.MOVE.UP);
+                        //rock_.RockMove(o_RockManager.MOVE.UP);
+                        rock_.RockMove(Vector3.up);
                     }
                 }
 
@@ -148,12 +150,14 @@ public class Circle : MonoBehaviour
                     if (transform.localEulerAngles.y > 269)
                     {
                         angle_ += 0.3f;
-                        rock_.RockMove(o_RockManager.MOVE.DOWN);
+                        //rock_.RockMove(o_RockManager.MOVE.DOWN);
+                        rock_.RockMove(Vector3.down);
                     }
                     else
                     {
                         angle_ -= 0.3f;
-                        rock_.RockMove(o_RockManager.MOVE.DOWN);
+                       // rock_.RockMove(o_RockManager.MOVE.DOWN);
+                        rock_.RockMove(Vector3.down);
                     }
                 }
 
@@ -164,6 +168,7 @@ public class Circle : MonoBehaviour
                     {
                         zPosition += 0.5f;
                         rock_.RockMove(o_RockManager.MOVE.FRONT);
+                        
                     }
                     else
                     {
