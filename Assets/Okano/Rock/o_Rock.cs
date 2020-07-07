@@ -24,6 +24,18 @@ public class o_Rock : MonoBehaviour
     [SerializeField]
     o_Rock ridedRock = null;
     int rideNum = 0;
+    [SerializeField]
+    GameObject o_RockUP_Prefab=null;
+    static GameObject o_RockUP=null;
+
+    private void Awake()
+    {
+        if (o_RockUP == null)
+        {
+            o_RockUP = Instantiate(o_RockUP_Prefab);
+            o_RockUP.SetActive(false);
+        }   
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -227,5 +239,24 @@ public class o_Rock : MonoBehaviour
             return;
         }
         massR = mass;
+    }
+
+    public void OnSelected()
+    {
+        o_RockUP.SetActive(true);
+        o_RockUP.transform.position = transform.position;
+    }
+    public void OffSelected()
+    {
+        o_RockUP.SetActive(false);
+    }
+    public bool ChangingMove()
+    {
+        if (colum == 0 || colum == rockManager.rocksCol - 1)
+        {
+            return true;
+        }
+
+        return false;
     }
 }
